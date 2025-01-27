@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "ElaborateGameMode.h"
-#include "ElaborateCharacter.h"
+#include "Core/ElaborateGameMode.h"
+#include "Characters/ElaborateCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 AElaborateGameMode::AElaborateGameMode()
