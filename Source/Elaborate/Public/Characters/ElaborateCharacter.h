@@ -55,6 +55,12 @@ private:
 
 public:
 	AElaborateCharacter();
+
+	UFUNCTION(BlueprintCallable)
+	void SaveGameGlobally();
+
+	UFUNCTION(BlueprintCallable)
+	void LoadGameGlobally();
 	
 public:
 	virtual void SaveCharacterData(FCharacterSaveData& OutSaveData) const override;

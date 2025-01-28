@@ -15,6 +15,7 @@
 #include "Serialization/JsonReader.h"
 
 #include "Systems/SaveSystem.h"
+#include "Core/ElaborateGameMode.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -57,6 +58,36 @@ AElaborateCharacter::AElaborateCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+}
+
+void AElaborateCharacter::SaveGameGlobally()
+{
+	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
+
+	if (GameMode)
+	{
+		AElaborateGameMode* GM = Cast<AElaborateGameMode>(GameMode);
+		if (GM)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Current GameMode: %s"), *GameMode->GetName());
+			GM->SaveGameGlobaly();
+		}
+	}
+}
+
+void AElaborateCharacter::LoadGameGlobally()
+{
+	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
+
+	if (GameMode)
+	{
+		AElaborateGameMode* GM = Cast<AElaborateGameMode>(GameMode);
+		if (GM)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Current GameMode: %s"), *GameMode->GetName());
+			GM->LoadGameGlobaly();
+		}
+	}
 }
 
 void AElaborateCharacter::SaveCharacterData(FCharacterSaveData& OutSaveData) const
