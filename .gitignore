@@ -74,4 +74,5 @@ Plugins/**/Intermediate/*
 DerivedDataCache/*
 
 # Content that was added by default
-Content/*
+Content/StarterContent/*
+Content/ThirdPerson/*

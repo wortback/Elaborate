@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+
+#include "Systems/Interfaces/SavableCharacter.h"
+
 #include "ElaborateCharacter.generated.h"
 
 class USpringArmComponent;
@@ -16,7 +19,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AElaborateCharacter : public ACharacter
+class AElaborateCharacter : public ACharacter, public ISavableCharacter
 {
 	GENERATED_BODY()
 
@@ -44,9 +47,19 @@ class AElaborateCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+private:
+	int32 Level = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Status, meta = (AllowPrivateAccess = "true"))
+	FString QuestID = TEXT("IT0Q0");
+
 public:
 	AElaborateCharacter();
 	
+public:
+	virtual void SaveCharacterData(FCharacterSaveData& OutSaveData) const override;
+
+	virtual void LoadCharacterData(const FCharacterSaveData& InSaveData) override;
 
 protected:
 

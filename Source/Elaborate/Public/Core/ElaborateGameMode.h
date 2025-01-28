@@ -13,6 +13,12 @@ class AElaborateGameMode : public AGameModeBase
 
 public:
 	AElaborateGameMode();
+
+	UFUNCTION()
+	void SaveGameGlobaly();
+
+	UFUNCTION()
+	void LoadGameGlobaly();
 };
 
 
