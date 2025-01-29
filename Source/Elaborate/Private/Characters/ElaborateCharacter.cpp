@@ -10,6 +10,12 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonSerializer.h"
+#include "Serialization/JsonReader.h"
+
+#include "Systems/SaveSystem.h"
+#include "Core/ElaborateGameMode.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -52,6 +58,94 @@ AElaborateCharacter::AElaborateCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+}
+
+void AElaborateCharacter::SaveGameGlobally()
+{
+	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
+
+	if (GameMode)
+	{
+		AElaborateGameMode* GM = Cast<AElaborateGameMode>(GameMode);
+		if (GM)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Current GameMode: %s"), *GameMode->GetName());
+			GM->SaveGameGlobaly();
+		}
+	}
+}
+
+void AElaborateCharacter::LoadGameGlobally()
+{
+	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
+
+	if (GameMode)
+	{
+		AElaborateGameMode* GM = Cast<AElaborateGameMode>(GameMode);
+		if (GM)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Current GameMode: %s"), *GameMode->GetName());
+			GM->LoadGameGlobaly();
+		}
+	}
+}
+
+void AElaborateCharacter::SaveGameLocally(int32 SlotIndex)
+{
+	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
+
+	if (GameMode)
+	{
+		AElaborateGameMode* GM = Cast<AElaborateGameMode>(GameMode);
+		if (GM)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Current GameMode: %s"), *GameMode->GetName());
+			GM->SaveGameLocally(SlotIndex);
+		}
+	}
+}
+
+void AElaborateCharacter::LoadGameLocally(int32 SlotIndex)
+{
+	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
+
+	if (GameMode)
+	{
+		AElaborateGameMode* GM = Cast<AElaborateGameMode>(GameMode);
+		if (GM)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Current GameMode: %s"), *GameMode->GetName());
+			GM->LoadGameLocally(SlotIndex);
+		}
+	}
+}
+
+void AElaborateCharacter::SaveCharacterData(FCharacterSaveData& OutSaveData) const
+{
+	OutSaveData.CharacterName = GetFName();
+	OutSaveData.Transform = GetActorTransform();
+
+	// Serialize custom data as a string (e.g., JSON)
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutSaveData.CustomData);
+	Writer->WriteObjectStart();
+	Writer->WriteValue(TEXT("Level"), Level);
+	Writer->WriteValue(TEXT("CurrentQuestID"), QuestID);
+	Writer->WriteObjectEnd();
+	Writer->Close();
+}
+
+void AElaborateCharacter::LoadCharacterData(const FCharacterSaveData& InSaveData)
+{
+	SetActorTransform(InSaveData.Transform);
+
+	// Deserialize custom data from string
+	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(InSaveData.CustomData);
+	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject());
+	if (FJsonSerializer::Deserialize(Reader, JsonObject))
+	{
+		Level = JsonObject->GetNumberField(TEXT("Level"));
+		QuestID = JsonObject->GetStringField(TEXT("CurrentQuestID"));
+	}
 }
 
 void AElaborateCharacter::BeginPlay()

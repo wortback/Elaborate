@@ -5,3 +5,5 @@
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, Elaborate, "Elaborate" );
  
+
+DEFINE_LOG_CATEGORY(LogSaveLoad);
