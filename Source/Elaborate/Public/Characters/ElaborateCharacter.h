@@ -61,6 +61,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void LoadGameGlobally();
+
+	UFUNCTION(BlueprintCallable)
+	void SaveGameLocally(int32 SlotIndex);
+
+	UFUNCTION(BlueprintCallable)
+	void LoadGameLocally(int32 SlotIndex);
 	
 public:
 	virtual void SaveCharacterData(FCharacterSaveData& OutSaveData) const override;

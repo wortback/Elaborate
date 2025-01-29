@@ -90,6 +90,36 @@ void AElaborateCharacter::LoadGameGlobally()
 	}
 }
 
+void AElaborateCharacter::SaveGameLocally(int32 SlotIndex)
+{
+	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
+
+	if (GameMode)
+	{
+		AElaborateGameMode* GM = Cast<AElaborateGameMode>(GameMode);
+		if (GM)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Current GameMode: %s"), *GameMode->GetName());
+			GM->SaveGameLocally(SlotIndex);
+		}
+	}
+}
+
+void AElaborateCharacter::LoadGameLocally(int32 SlotIndex)
+{
+	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
+
+	if (GameMode)
+	{
+		AElaborateGameMode* GM = Cast<AElaborateGameMode>(GameMode);
+		if (GM)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Current GameMode: %s"), *GameMode->GetName());
+			GM->LoadGameLocally(SlotIndex);
+		}
+	}
+}
+
 void AElaborateCharacter::SaveCharacterData(FCharacterSaveData& OutSaveData) const
 {
 	OutSaveData.CharacterName = GetFName();

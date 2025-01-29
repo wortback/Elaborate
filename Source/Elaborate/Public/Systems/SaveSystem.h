@@ -7,8 +7,23 @@
 #include "SaveSystem.generated.h"
 
 
+
 /**
- *  Struct that holds actor's data that has to persist 
+ *  Struct for storing save data of a character
+ * 
+ */
+USTRUCT(BlueprintType)
+struct FSystemSaveData
+{
+    GENERATED_BODY()
+
+
+    UPROPERTY(BlueprintReadWrite, Category = "SaveData")
+    FRotator ControllerRotation;
+};
+
+/**
+ *  Struct for storing save data of an actor
  * 
  */
 USTRUCT(BlueprintType)
@@ -25,7 +40,7 @@ struct FActorSaveData
 };
 
 /**
- *  Struct that holds actor's data that has to persist 
+ *  Struct for storing save data of a character
  * 
  */
 USTRUCT(BlueprintType)
@@ -62,12 +77,15 @@ public:
     UPROPERTY(BlueprintReadWrite, Category = "SaveData")
     TArray<int32> PlayerIndecies;
 
-
-    UPROPERTY(BlueprintReadWrite, Category = "SaveData")
+    
+    UPROPERTY(BlueprintReadWrite, Category = "SaveData | Saved")
     TArray<FCharacterSaveData> SavedCharacters;
 
-    UPROPERTY(BlueprintReadWrite, Category = "SaveData")
+    UPROPERTY(BlueprintReadWrite, Category = "SaveData | Saved")
     TArray<FActorSaveData> SavedActors;
+
+    UPROPERTY(BlueprintReadWrite, Category = "SaveData | Saved")
+    FSystemSaveData SavedSystemData;
 
 public:
     USaveSystem();
