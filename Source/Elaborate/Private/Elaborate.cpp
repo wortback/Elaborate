@@ -7,3 +7,8 @@ IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, Elaborate, "Elaborate" );
  
 
 DEFINE_LOG_CATEGORY(LogSaveLoad);
+DEFINE_LOG_CATEGORY(LogCombatSystem);
+
+DEFINE_LOG_CATEGORY(LogInventoryComponent);
+DEFINE_LOG_CATEGORY(LogInventoryHUD);
+DEFINE_LOG_CATEGORY(LogItems);

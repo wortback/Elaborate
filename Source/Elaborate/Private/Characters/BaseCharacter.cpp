@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "Characters/ElaborateCharacter.h"
+#include "Characters/BaseCharacter.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -22,7 +22,7 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 //////////////////////////////////////////////////////////////////////////
 // AElaborateCharacter
 
-AElaborateCharacter::AElaborateCharacter()
+ABaseCharacter::ABaseCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -60,7 +60,7 @@ AElaborateCharacter::AElaborateCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
-void AElaborateCharacter::SaveGameGlobally()
+void ABaseCharacter::SaveGameGlobally()
 {
 	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
 
@@ -75,7 +75,7 @@ void AElaborateCharacter::SaveGameGlobally()
 	}
 }
 
-void AElaborateCharacter::LoadGameGlobally()
+void ABaseCharacter::LoadGameGlobally()
 {
 	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
 
@@ -90,7 +90,7 @@ void AElaborateCharacter::LoadGameGlobally()
 	}
 }
 
-void AElaborateCharacter::SaveGameLocally(int32 SlotIndex)
+void ABaseCharacter::SaveGameLocally(int32 SlotIndex)
 {
 	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
 
@@ -105,7 +105,7 @@ void AElaborateCharacter::SaveGameLocally(int32 SlotIndex)
 	}
 }
 
-void AElaborateCharacter::LoadGameLocally(int32 SlotIndex)
+void ABaseCharacter::LoadGameLocally(int32 SlotIndex)
 {
 	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
 
@@ -120,7 +120,7 @@ void AElaborateCharacter::LoadGameLocally(int32 SlotIndex)
 	}
 }
 
-void AElaborateCharacter::SaveCharacterData(FCharacterSaveData& OutSaveData) const
+void ABaseCharacter::SaveCharacterData(FCharacterSaveData& OutSaveData) const
 {
 	OutSaveData.CharacterName = GetFName();
 	OutSaveData.Transform = GetActorTransform();
@@ -134,7 +134,7 @@ void AElaborateCharacter::SaveCharacterData(FCharacterSaveData& OutSaveData) con
 	Writer->Close();
 }
 
-void AElaborateCharacter::LoadCharacterData(const FCharacterSaveData& InSaveData)
+void ABaseCharacter::LoadCharacterData(const FCharacterSaveData& InSaveData)
 {
 	SetActorTransform(InSaveData.Transform);
 
@@ -148,7 +148,7 @@ void AElaborateCharacter::LoadCharacterData(const FCharacterSaveData& InSaveData
 	}
 }
 
-void AElaborateCharacter::BeginPlay()
+void ABaseCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
@@ -157,7 +157,7 @@ void AElaborateCharacter::BeginPlay()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void AElaborateCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
@@ -176,10 +176,10 @@ void AElaborateCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AElaborateCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Move);
 
 		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AElaborateCharacter::Look);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Look);
 	}
 	else
 	{
@@ -187,7 +187,7 @@ void AElaborateCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	}
 }
 
-void AElaborateCharacter::Move(const FInputActionValue& Value)
+void ABaseCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -210,7 +210,7 @@ void AElaborateCharacter::Move(const FInputActionValue& Value)
 	}
 }
 
-void AElaborateCharacter::Look(const FInputActionValue& Value)
+void ABaseCharacter::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();

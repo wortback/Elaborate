@@ -8,7 +8,7 @@
 
 #include "Systems/Interfaces/SavableCharacter.h"
 
-#include "ElaborateCharacter.generated.h"
+#include "BaseCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -19,7 +19,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AElaborateCharacter : public ACharacter, public ISavableCharacter
+class ABaseCharacter : public ACharacter, public ISavableCharacter
 {
 	GENERATED_BODY()
 
@@ -54,7 +54,7 @@ private:
 	FString QuestID = TEXT("IT0Q0");
 
 public:
-	AElaborateCharacter();
+	ABaseCharacter();
 
 	UFUNCTION(BlueprintCallable)
 	void SaveGameGlobally();

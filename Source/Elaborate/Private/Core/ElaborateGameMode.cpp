@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Core/ElaborateGameMode.h"
-#include "Characters/ElaborateCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
@@ -12,7 +11,7 @@
 
 #include "Elaborate.h"
 #include "Systems/SaveSystem.h"
-#include "Characters/ElaborateCharacter.h"
+#include "Characters/BaseCharacter.h"
 #include "Systems/Interfaces/SavableCharacter.h"
 #include "Systems/Interfaces/SavableActor.h"
 
