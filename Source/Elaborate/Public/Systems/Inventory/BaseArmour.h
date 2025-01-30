@@ -26,10 +26,6 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Armour")
 	float MaxDamageReduction = 0.10f;
 
-	/** Type of armour's passive effect */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Armour")
-	EPassiveArmour ArmourPassive = EPassiveArmour::EPA_None;
-
 	/** Scaler value for the passive effect */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Armour")
 	float PassiveMultiplier = 0.0f;

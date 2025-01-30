@@ -4,33 +4,49 @@
 #include "Characters/CharacterCombatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+#include "Systems/Interfaces/CombatWeaponInterface.h"
+#include "Systems/Inventory/WorldItem.h"
+#include "Systems/Inventory/BaseWeapon.h"
+
 #include "Elaborate.h"
 
 UCharacterCombatComponent::UCharacterCombatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
-	
+
 }
 
-
-void UCharacterCombatComponent::PerformMeleeAttack(bool bIsHeavy)
+void UCharacterCombatComponent::PerformAttack(bool bIsHeavy)
 {
+	if (!EquippedWeapon)
+	{
+		UE_LOG(LogCombatSystem, Warning, TEXT("No weapon equipped!"));
+		return;
+	}
+
+	ICombatWeaponInterface* CombatWeapon = Cast<ICombatWeaponInterface>(EquippedWeapon);
+	if (!CombatWeapon)
+	{
+		UE_LOG(LogCombatSystem, Warning, TEXT("Equipped weapon doesn't implement CombatWeaponInterface!"));
+		return;
+	}
+
 	if (bIsHeavy)
 	{
-		if (Stamina - HeavyAttackStaminaConsuption < 0)
+		if (Stamina < HeavyAttackStaminaConsumption)
 		{
-			UE_LOG(LogCombatSystem, Warning, TEXT("Can't perform a heavy attack since the stamina is low."));
-			return;
+			UE_LOG(LogCombatSystem, Warning, TEXT("Not enough stamina for a heavy attack!"));
+			return; // Exit early instead of doing a normal attack
 		}
-		// TODO
-	}
-	// TODO
-}
 
-void UCharacterCombatComponent::PerformRangedAttack()
-{
-	// TODO
+		bIsAttackHeavy = true;
+		CombatWeapon->HeavyAttack();
+		return;
+	}
+
+	// Perform Normal Attack
+	CombatWeapon->Attack();
 }
 
 void UCharacterCombatComponent::TakeDamage(float IncomingDamage)
@@ -76,10 +92,46 @@ void UCharacterCombatComponent::Die()
 	UE_LOG(LogCombatSystem, Warning, TEXT("Combat component owner died."));
 }
 
+float UCharacterCombatComponent::CalculateTotalAttackDMG(bool bIsMelee)
+{
+	UBaseWeapon* WeaponStats = Cast<UBaseWeapon>(EquippedWeapon->GetItemClass()->GetDefaultObject());
+	if (!WeaponStats)
+	{
+		UE_LOG(LogCombatSystem, Warning, TEXT("Weapon Cast failed."));
+		return 0.0f;
+	}
+
+	// Calc base DMG
+	float TotalDMG = FMath::FRandRange(WeaponStats->MinBaseDamage, WeaponStats->MaxBaseDamage);
+	TotalDMG += bIsMelee ? BaseMeleeDMG : BaseRangedDMG;
+	
+	// Apply crit multiplier if crit hit
+	const float TotalCritRate = WeaponStats->CritRate + CritRate;
+
+	float CritProb = FMath::FRand();
+	if (CritProb < TotalCritRate)
+	{
+		UE_LOG(LogCombatSystem, Warning, TEXT("Landed a crit hit."));
+
+		TotalDMG *= (WeaponStats->CritDamage + CritDMG) - 1.f;
+	}
+
+	// Apply extra if heavy
+	if (bIsAttackHeavy)
+	{
+		TotalDMG *= HeavyAttackDMGMultiplier;
+	}
+
+	// Reset state after the damage calculation
+	bIsAttackHeavy = false;
+	UE_LOG(LogCombatSystem, Log, TEXT("Total damage equals %f"), TotalDMG);
+	return TotalDMG;
+}
+
 void UCharacterCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 
@@ -107,6 +159,6 @@ void UCharacterCombatComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	
+
 }
 

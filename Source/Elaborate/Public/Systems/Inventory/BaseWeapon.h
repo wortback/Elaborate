@@ -19,33 +19,29 @@ class ELABORATE_API UBaseWeapon : public UBaseItem
 	
 public:
 	/** Base Damage the weapon deals */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon")
-	int32 MinBaseDamage = 0;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon | Stats")
+	float MinBaseDamage = 0.f;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon")
-	int32 MaxBaseDamage = 10;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon | Stats")
+	float MaxBaseDamage = 10.f;
 
 	/** Attack per second */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon | Stats")
 	float AttackRate = 0.0f;
 
-	/** Maximum radius of AoE spells */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon")
-	float MaximumAoERange = 0.0f;
-
 	/** How often the weapon does a critical hit */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon | Stats")
 	float CritRate = 0.0f;
 
-	/** Upon doing a critical hit, how big is the damage scaled from the base damage */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon")
-	float CritDamage = 0.0f;
+	/** In range 1.0... where 1.0 is an ordinary DMG */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon | Stats")
+	float CritDamage = 1.0f;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon")
-	EPassiveWeapon WeaponPassive = EPassiveWeapon::EPW_None;
+	/** Current level of the weapon */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon | Upgrade")
+	int32 UpgradeLevel = 0;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon")
-	float PassiveMultiplier = 0.0f;
-
-
+	/** Maximum level of the weapon */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Weapon | Upgrade")
+	int32 MaxUpgradeLevel = 0;
 };

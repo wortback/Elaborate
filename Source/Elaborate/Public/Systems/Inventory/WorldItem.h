@@ -59,4 +59,6 @@ public:
 
 	virtual bool Interact(UInventoryComponent* Inventory) override;
 
+	inline TSubclassOf<UBaseItem> GetItemClass() { return ItemClass; };
+
 };

@@ -80,23 +80,6 @@ void UItemInfoWidget::InitialiseWeaponWidget()
 		AddAttributeValue2->SetText(FText::FromString(Temp));
 		AddAttributeValue2->SetColorAndOpacity(FSlateColor(FLinearColor(0.03, 0.3, 0.05)));
 
-		AddAttributeName3->SetText(FText::FromString("Max AOE Range"));
-		Temp = FString::FromInt(DefaultWeapon->MaximumAoERange) + " m";
-		AddAttributeValue3->SetText(FText::FromString(Temp));
-		AddAttributeValue3->SetColorAndOpacity(FSlateColor(FLinearColor(0.03, 0.3, 0.05)));
-
-		if (DefaultWeapon->WeaponPassive != EPassiveWeapon::EPW_None)
-		{
-			// TODO
-			AddAttributeName4->SetText(FText::FromString("SpecialPassive"));
-			AddAttributeName4->SetText(FText::FromString("Val"));
-		}
-		else
-		{
-			AddAttributeName4->RemoveFromParent();
-			AddAttributeValue4->RemoveFromParent();
-		}
-
 		InitCommon(*DefaultWeapon);
 	}
 
@@ -127,20 +110,6 @@ void UItemInfoWidget::InitialiseArmourWidget()
 		FString Temp = FString::FromInt(DefaultArmour->MinDamageReduction * 100) + "-" + 
 			FString::FromInt(DefaultArmour->MaxDamageReduction * 100) + " %";
 		BaseAttributeValue->SetText(FText::FromString(Temp));
-
-		if (DefaultArmour->ArmourPassive != EPassiveArmour::EPA_None)
-		{
-			// TODO
-// 			AddAttributeName1->SetText(FText::FromString("Crit Rate"));
-// 			Temp = "+ " + FString::FromInt(DefaultWeapon->CritRate) + " %";
-// 			AddAttributeValue1->SetText(FText::FromString(Temp));
-// 			AddAttributeValue1->SetColorAndOpacity(FSlateColor(FLinearColor(0.03, 0.3, 0.05)));
-		}
-		else
-		{
-			AddAttributeName1->RemoveFromParent();
-			AddAttributeValue1->RemoveFromParent();
-		}
 
 		InitCommon(*DefaultArmour);
 	}

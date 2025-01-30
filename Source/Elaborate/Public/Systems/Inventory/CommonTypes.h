@@ -111,21 +111,3 @@ enum class EConsumableEffect : uint8
 	ECE_RegenerationSpeedup,
 	ECE_SpecialEffect,
 };
-
-/**
- * Passive Effects of an Armour //TODO
- */
-UENUM()
-enum class EPassiveArmour : uint8
-{
-	EPA_None,
-};
-
-/**
- * Passive Effects of a Weapon //TODO
- */
-UENUM()
-enum class EPassiveWeapon : uint8
-{
-	EPW_None,
-};

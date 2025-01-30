@@ -17,3 +17,4 @@ DECLARE_LOG_CATEGORY_EXTERN(LogItems, Log, All)
 //	Collision
 //////////////////////////////////////////////////////////////////////////
 #define ECC_Interactable ECC_GameTraceChannel1
+#define ECC_Attackable ECC_GameTraceChannel2
