@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Systems/Inventory/CommonTypes.h"
-#include "Systems/Inventory/F_InventoryItem.h"
+#include "Systems/Inventory/FInventoryItem.h"
 #include "Systems/Interfaces/StorageInterface.h"
 #include "Systems/Interfaces/InteractableInterface.h"
 
@@ -56,11 +56,11 @@ public:
 protected:
 	/** Separate array for runtime items management. Items will be added/removed here during the game */
 	UPROPERTY(Transient, meta = (AllowPrivateAccess = "true"))
-	TArray<F_InventoryItem> RuntimeItems;
+	TArray<FInventoryItem> RuntimeItems;
 
 	/** Contains manually set items */
 	UPROPERTY(EditAnywhere, Category = "Storage Defaults", meta = (AllowPrivateAccess = "true"))
-	TArray<F_InventoryItem> OriginalItems;
+	TArray<FInventoryItem> OriginalItems;
 
 	/** Storage capacity */
 	UPROPERTY(EditAnywhere, Category = "Storage Defaults", meta = (AllowPrivateAccess = "true"))
@@ -123,7 +123,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	FORCEINLINE const TArray<F_InventoryItem>& GetStoredItems() const { return RuntimeItems; };
-	FORCEINLINE TArray<F_InventoryItem>& SetStoredItems() { return RuntimeItems; };
+	FORCEINLINE const TArray<FInventoryItem>& GetStoredItems() const { return RuntimeItems; };
+	FORCEINLINE TArray<FInventoryItem>& SetStoredItems() { return RuntimeItems; };
 
 };

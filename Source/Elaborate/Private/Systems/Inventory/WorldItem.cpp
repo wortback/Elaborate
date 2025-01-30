@@ -94,7 +94,7 @@ void AWorldItem::Tick(float DeltaTime)
 
 bool AWorldItem::Interact(UInventoryComponent* Inventory)
 {
-	F_InventoryItem* Item = new F_InventoryItem();
+	FInventoryItem* Item = new FInventoryItem();
 	if (ItemClass)
 	{
 		UBaseItem* BaseItem = Cast<UBaseItem>(ItemClass->GetDefaultObject());

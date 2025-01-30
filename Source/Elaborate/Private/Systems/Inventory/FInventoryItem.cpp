@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Systems/Inventory/F_InventoryItem.h"
+#include "Systems/Inventory/FInventoryItem.h"
 #include "Systems/Inventory/CommonTypes.h"
 #include "Systems/Inventory/Defines.h"
 
@@ -9,7 +9,7 @@
 
 
 
-F_InventoryItem::F_InventoryItem()
+FInventoryItem::FInventoryItem()
 {
     ItemClass = UBaseItem::StaticClass();
     Quantity = 0;
@@ -18,11 +18,11 @@ F_InventoryItem::F_InventoryItem()
     ItemType = EItemType::EIT_None;
 }
 
-F_InventoryItem::~F_InventoryItem()
+FInventoryItem::~FInventoryItem()
 {
 }
 
-F_InventoryItem::F_InventoryItem(const F_InventoryItem& Item)
+FInventoryItem::FInventoryItem(const FInventoryItem& Item)
 {
     ItemClass = Item.ItemClass;
     Quantity = Item.Quantity;
@@ -31,7 +31,7 @@ F_InventoryItem::F_InventoryItem(const F_InventoryItem& Item)
     ItemType = Item.ItemType;
 }
 
-void F_InventoryItem::ClearItem()
+void FInventoryItem::ClearItem()
 {
     ItemClass = UBaseItem::StaticClass();
     Quantity = 0;

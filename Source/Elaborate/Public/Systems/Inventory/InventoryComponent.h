@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Systems/Inventory/F_InventoryItem.h"
+#include "Systems/Inventory/FInventoryItem.h"
 #include "InventoryComponent.generated.h"
 
 
@@ -25,16 +25,16 @@ class ELABORATE_API UInventoryComponent : public UActorComponent
 
 private:
 	/** Array for items of types Armour, Weapon */
-	TArray<F_InventoryItem> Equipment;
+	TArray<FInventoryItem> Equipment;
 
 	/** Array for items of type QuestItem */
-	TArray<F_InventoryItem> QuestItems;
+	TArray<FInventoryItem> QuestItems;
 
 	/** Array for items of type Consumable */
-	TArray<F_InventoryItem> Consumables;
+	TArray<FInventoryItem> Consumables;
 
 	/** Array for items of type MiscellaneousItem */
-	TArray<F_InventoryItem> MiscellaneousItems;
+	TArray<FInventoryItem> MiscellaneousItems;
 
 	int32 EquipmentInitialCapacity = 20;
 
@@ -45,22 +45,22 @@ private:
 	int32 MiscellaneousItemsInitialCapacity = 30;
 
 	/** Inventory item reserved for the equipped armour */
-	F_InventoryItem EquippedArmour;
+	FInventoryItem EquippedArmour;
 
 	/** Inventory item reserved for the equipped weapon */
-	F_InventoryItem EquippedWeapon;
+	FInventoryItem EquippedWeapon;
 
 	/** Inventory item reserved for quick access, such as a hotkey or shortcut slot */
-	F_InventoryItem QuickAccessItem1;
+	FInventoryItem QuickAccessItem1;
 
 	/** Inventory item reserved for quick access, such as a hotkey or shortcut slot */
-	F_InventoryItem QuickAccessItem2;
+	FInventoryItem QuickAccessItem2;
 
 	/** Inventory item reserved for quick access, such as a hotkey or shortcut slot */
-	F_InventoryItem QuickAccessItem3;
+	FInventoryItem QuickAccessItem3;
 
 	/** Inventory item reserved for quick access, such as a hotkey or shortcut slot */
-	F_InventoryItem QuickAccessItem4;
+	FInventoryItem QuickAccessItem4;
 
 	int32 Gold = 0;
 
@@ -79,7 +79,7 @@ public:
 	 * @return true if the item was successfully added
 	 * @return false if the item could not be added
 	 */
-	bool ProcessItem(F_InventoryItem* Item, int32 Quantity, bool UpdateWeight);
+	bool ProcessItem(FInventoryItem* Item, int32 Quantity, bool UpdateWeight);
 
 	/**
 	 * Removes Item from the inventory
@@ -87,7 +87,7 @@ public:
 	 * @param Item The item to be removed
 	 * @return true if the removal was successful
 	 */
-	bool RemoveItem(F_InventoryItem* Item, int32 Quantity);
+	bool RemoveItem(FInventoryItem* Item, int32 Quantity);
 
 	/**
 	 * Moves the Item from the inventory array to the equipped slot
@@ -96,7 +96,7 @@ public:
 	 * @param Item The item to be equipped
 	 * @return true if the removal was successful
 	 */
-	bool EquipItem(F_InventoryItem* Item, int32 Location = -1);
+	bool EquipItem(FInventoryItem* Item, int32 Location = -1);
 
 	/**
 	 * Moves the Item from the equipped slot to the inventory
@@ -105,7 +105,7 @@ public:
 	 * @param Item The item to be unequipped
 	 * @return true if the removal was successful
 	 */
-	bool UnequipItem(F_InventoryItem* Item, int32 Location = -1);
+	bool UnequipItem(FInventoryItem* Item, int32 Location = -1);
 
 	/**
 	 * Moves the Item from this inventory to another one
@@ -114,7 +114,7 @@ public:
 	 * @param Receiver The InvenotryComponent that receives the item
 	 * @return true if the transfer was successful
 	 */
-	bool TransferItem(F_InventoryItem* Item, UInventoryComponent* Receiver, int32 Quantity = 1);
+	bool TransferItem(FInventoryItem* Item, UInventoryComponent* Receiver, int32 Quantity = 1);
 
 	/**
 	 * Moves the Item from the sender inventory to this inventory
@@ -123,17 +123,17 @@ public:
 	 * @param Sender The InvenotryComponent that transfers the item
 	 * @return true if the transfer was successful
 	 */
-	bool ReceiveItem(F_InventoryItem* Item, UInventoryComponent* Sender, int32 Quantity = 1);
+	bool ReceiveItem(FInventoryItem* Item, UInventoryComponent* Sender, int32 Quantity = 1);
 
 	/**
 	 * Depending on ItemType returns the TArray the item can be assigned to
 	 */
-	const TArray<F_InventoryItem>& GetItemsForItemType(EItemType ItemType) const;
+	const TArray<FInventoryItem>& GetItemsForItemType(EItemType ItemType) const;
 
 	/**
 	 * Depending on ItemType returns the TArray the item can be assigned to
 	 */
-	TArray<F_InventoryItem>& SetItemsForItemType(EItemType ItemType);
+	TArray<FInventoryItem>& SetItemsForItemType(EItemType ItemType);
 
 protected:
 
@@ -148,11 +148,11 @@ private:
 	 * 
 	 * @param Index optional: start initialising the indices of the array items from the given index
 	 */
-	void InitialiseItemArray(TArray<F_InventoryItem>& ItemArr, int32 Capacity, int32 Index = 0);
+	void InitialiseItemArray(TArray<FInventoryItem>& ItemArr, int32 Capacity, int32 Index = 0);
 
-	void InitialiseEquippedItem(F_InventoryItem& Item, int32 IndexLocation);
+	void InitialiseEquippedItem(FInventoryItem& Item, int32 IndexLocation);
 
-	F_InventoryItem& GetSpecialItemByIndex(int32 Index);
+	FInventoryItem& GetSpecialItemByIndex(int32 Index);
 
 	/**
 	 * Once an item is added to the inventory, find an available slot to host the item
@@ -160,7 +160,7 @@ private:
 	 * @return available index location in the inventory
 	 * @return DEFAULT_INDEX_LOCATION, if Item cannot be added
 	 */
-	int32 FindAvailableLocation(F_InventoryItem* Item);
+	int32 FindAvailableLocation(FInventoryItem* Item);
 
 	/**
 	 * Adds Item to the inventory
@@ -168,31 +168,31 @@ private:
 	 * @param Item The item to be added
 	 * @param IndexLocation The index of the position in the inventory where the item is to be hosted
 	 */
-	F_InventoryItem* AddItem(F_InventoryItem* Item, int IndexLocation, int32 Quantity, bool UpdateWeight);
+	FInventoryItem* AddItem(FInventoryItem* Item, int IndexLocation, int32 Quantity, bool UpdateWeight);
 
-	void SwapEquipped(F_InventoryItem& Item, F_InventoryItem& EquippedItem);
+	void SwapEquipped(FInventoryItem& Item, FInventoryItem& EquippedItem);
 
-	void EquipQAItem(F_InventoryItem& Item, int32 Location);
+	void EquipQAItem(FInventoryItem& Item, int32 Location);
 
-	void Consume(F_InventoryItem& Item);
+	void Consume(FInventoryItem& Item);
 
 	void UpdateCarriedWeight(float Weight);
 
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	FORCEINLINE const TArray<F_InventoryItem>& GetEquipment() const { return Equipment; }
-	FORCEINLINE const TArray<F_InventoryItem>& GetQuestItems() const { return QuestItems; }
-	FORCEINLINE const TArray<F_InventoryItem>& GetConsumables() const { return Consumables; }
-	FORCEINLINE const TArray<F_InventoryItem>& GetMiscellaneousItems() const { return MiscellaneousItems; }
+	FORCEINLINE const TArray<FInventoryItem>& GetEquipment() const { return Equipment; }
+	FORCEINLINE const TArray<FInventoryItem>& GetQuestItems() const { return QuestItems; }
+	FORCEINLINE const TArray<FInventoryItem>& GetConsumables() const { return Consumables; }
+	FORCEINLINE const TArray<FInventoryItem>& GetMiscellaneousItems() const { return MiscellaneousItems; }
 
 	FORCEINLINE int32 GetEquipmentCapacity() const { return EquipmentInitialCapacity; }
 	FORCEINLINE int32 GetQuestItemsCapacity() const { return QuestItemsInitialCapacity; }
 	FORCEINLINE int32 GetConsumablesCapacity() const { return ConsumablesInitialCapacity; }
 	FORCEINLINE int32 GetMiscellaneousItemsCapacity() const { return MiscellaneousItemsInitialCapacity; }
 
-	FORCEINLINE const F_InventoryItem& GetEquippedArmour() const { return EquippedArmour; }
-	FORCEINLINE const F_InventoryItem& GetEquippedWeapon() const { return EquippedWeapon; }
+	FORCEINLINE const FInventoryItem& GetEquippedArmour() const { return EquippedArmour; }
+	FORCEINLINE const FInventoryItem& GetEquippedWeapon() const { return EquippedWeapon; }
 
 	FORCEINLINE float GetCarriedWeight() const { return CarriedWeight; };
 	FORCEINLINE float GetMaxCarriedWeight() const { return MaxCarriedWeight; };
@@ -204,6 +204,6 @@ public:
 	* 
 	* @param QAIndex Index of the quick item (range: 1-4)
 	*/
-	const F_InventoryItem& GetQuickAccessItem(int32 QAIndex) const;
+	const FInventoryItem& GetQuickAccessItem(int32 QAIndex) const;
 		
 };

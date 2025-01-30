@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Systems/Inventory/F_InventoryItem.h"
+#include "Systems/Inventory/FInventoryItem.h"
 
 #include "StorageContentSlot.generated.h"
 
@@ -13,7 +13,7 @@ class UTextBlock;
 class UItemInfoWidget;
 class UStorageContentWidget;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSlotEnteredEvent, F_InventoryItem, Item);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSlotEnteredEvent, FInventoryItem, Item);
 
 /**
  * 
@@ -30,7 +30,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UTextBlock> SlotText;
 
-	F_InventoryItem* SlotItem;
+	FInventoryItem* SlotItem;
 
 	// Delegates
 	UPROPERTY(BlueprintAssignable)

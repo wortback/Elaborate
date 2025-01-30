@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Systems/Inventory/F_InventoryItem.h"
+#include "Systems/Inventory/FInventoryItem.h"
 
 #include "ItemInfoWidget.generated.h"
 
@@ -89,7 +89,7 @@ private:
 
 	int32 Height = 540;
 
-	F_InventoryItem InspectedItem;
+	FInventoryItem InspectedItem;
 
 	UTexture2D* ItemPicture = nullptr;
 
@@ -115,6 +115,6 @@ private:
 	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
 
 public:
-	void SetInspectedItem(F_InventoryItem Item) { InspectedItem = Item; };
+	void SetInspectedItem(FInventoryItem Item) { InspectedItem = Item; };
 
 };

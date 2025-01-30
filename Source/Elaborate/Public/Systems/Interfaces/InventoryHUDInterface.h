@@ -8,7 +8,7 @@
 
 class AActor;
 class UInventoryComponent;
-struct F_InventoryItem;
+struct FInventoryItem;
 
 /** Interface for a playable character that possesses an inventory component */
 UINTERFACE(MinimalAPI)
@@ -33,17 +33,17 @@ public:
 
 	virtual void UpdateInventoryHUD() = 0;
 
-	virtual void RemoveItem(F_InventoryItem* Item, int32 Quantity) = 0;
+	virtual void RemoveItem(FInventoryItem* Item, int32 Quantity) = 0;
 
-	virtual bool ProcessItem(F_InventoryItem* Item, int32 Quantity) = 0;
+	virtual bool ProcessItem(FInventoryItem* Item, int32 Quantity) = 0;
 
-	virtual bool EquipItem(F_InventoryItem* Item, int32 Location = -1) = 0;
+	virtual bool EquipItem(FInventoryItem* Item, int32 Location = -1) = 0;
 
-	virtual bool UnequipItem(F_InventoryItem* Item, int32 Location = -1) = 0;
+	virtual bool UnequipItem(FInventoryItem* Item, int32 Location = -1) = 0;
 
-	virtual bool SellItem(F_InventoryItem* Item, int32 Quantity) = 0;
+	virtual bool SellItem(FInventoryItem* Item, int32 Quantity) = 0;
 
-	virtual bool BuyItem(F_InventoryItem* Item, int32 Quantity) = 0;
+	virtual bool BuyItem(FInventoryItem* Item, int32 Quantity) = 0;
 
 	virtual void UpdateNPCComponentPtr(UInventoryComponent* InventoryComp) = 0;
 

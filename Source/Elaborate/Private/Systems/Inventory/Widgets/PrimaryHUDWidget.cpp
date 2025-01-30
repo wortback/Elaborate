@@ -76,7 +76,7 @@ void UPrimaryHUDWidget::UpdateInventory(const UInventoryComponent* InventoryComp
 			SlotClass = InventorySlotClassShort;
 		}
 
-		for (const F_InventoryItem& Item : InventoryComponent->GetItemsForItemType(InventoryMenu->PlayerInventoryWindow->GetItemTypeForCurrentTab()))
+		for (const FInventoryItem& Item : InventoryComponent->GetItemsForItemType(InventoryMenu->PlayerInventoryWindow->GetItemTypeForCurrentTab()))
 		{
 			UInventorySlot* ChildSlot = CreateWidget<UInventorySlot>(GetWorld(), SlotClass);
 			ChildSlot->Item = Item;
@@ -88,7 +88,7 @@ void UPrimaryHUDWidget::UpdateInventory(const UInventoryComponent* InventoryComp
 		TArray<TObjectPtr<UInventorySlot>> EquippedSlots = { InventoryMenu->EquippedArmour, InventoryMenu->EquippedWeapon };
 		TArray<TObjectPtr<UInventorySlot>> QASlots = { InventoryMenu->QuickSlot1, InventoryMenu->QuickSlot2, 
 													   InventoryMenu->QuickSlot3, InventoryMenu->QuickSlot4 };
-		TArray<const F_InventoryItem*> EquippedItems = { &InventoryComponent->GetEquippedArmour(), &InventoryComponent->GetEquippedWeapon() };
+		TArray<const FInventoryItem*> EquippedItems = { &InventoryComponent->GetEquippedArmour(), &InventoryComponent->GetEquippedWeapon() };
 		for (int32 i = 0; i < EquippedSlots.Num(); ++i)
 		{
 			UpdateEquippedAndQASlots(EquippedSlots[i], EquippedItems[i]);
@@ -105,7 +105,7 @@ void UPrimaryHUDWidget::UpdateInventory(const UInventoryComponent* InventoryComp
 	}
 }
 
-void UPrimaryHUDWidget::UpdateEquippedAndQASlots(TObjectPtr<UInventorySlot> InventorySlot, const F_InventoryItem* Item)
+void UPrimaryHUDWidget::UpdateEquippedAndQASlots(TObjectPtr<UInventorySlot> InventorySlot, const FInventoryItem* Item)
 {
 	InventorySlot->Item = *Item;
 	InventorySlot->OwningHUD = this;
@@ -133,7 +133,7 @@ void UPrimaryHUDWidget::UpdateInventory(const UInventoryComponent* PlayerComp, c
 			SlotClass = InventorySlotClassShort;
 		}
 
-		for (const F_InventoryItem& Item : PlayerComp->GetItemsForItemType(PlayerInventory->GetItemTypeForCurrentTab()))
+		for (const FInventoryItem& Item : PlayerComp->GetItemsForItemType(PlayerInventory->GetItemTypeForCurrentTab()))
 		{
 			UInventorySlot* ChildSlot = CreateWidget<UInventorySlot>(GetWorld(), SlotClass);
 			ChildSlot->Item = Item;
@@ -151,7 +151,7 @@ void UPrimaryHUDWidget::UpdateInventory(const UInventoryComponent* PlayerComp, c
 			SlotClass = InventorySlotClassShort;
 		}
 
-		for (const F_InventoryItem& Item : NPCComp->GetItemsForItemType(NPCInventory->GetItemTypeForCurrentTab()))
+		for (const FInventoryItem& Item : NPCComp->GetItemsForItemType(NPCInventory->GetItemTypeForCurrentTab()))
 		{
 			UInventorySlot* ChildSlot = CreateWidget<UInventorySlot>(GetWorld(), InventorySlotClassShort);
 			ChildSlot->Item = Item;

@@ -2,7 +2,7 @@
 
 
 #include "Systems/Inventory/BaseStorage.h"
-#include "Systems/Inventory/F_InventoryItem.h"
+#include "Systems/Inventory/FInventoryItem.h"
 #include "Components/StaticMeshComponent.h"
 #include "Systems/Inventory/Widgets/StorageContentWidget.h"
 #include "Systems/Inventory/Widgets/StorageContentSlot.h"
@@ -71,7 +71,7 @@ void ABaseStorage::DisplayContent()
 			UE_LOG(LogInventoryHUD, Log, TEXT("Contents of the interacting storage actor are displayed."));
 			ContentWidget->OwningStorage = this;
 
-			for (F_InventoryItem& Item : RuntimeItems)
+			for (FInventoryItem& Item : RuntimeItems)
 			{
 				if (Item.ItemType != EItemType::EIT_None)
 				{
@@ -118,7 +118,7 @@ bool ABaseStorage::Interact(UInventoryComponent* Inventory)
 
 	// If there's at least one item in the inventory that is not of type NONE, display the storage content
 	// TODO: Maybe optimise to prevent two times iterating over the array (one time here, one in DisplayContent)
-	for (F_InventoryItem& Item : RuntimeItems)
+	for (FInventoryItem& Item : RuntimeItems)
 	{
 		if (ContentSlotClass)
 		{

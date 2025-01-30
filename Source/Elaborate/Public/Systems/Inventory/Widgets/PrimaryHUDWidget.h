@@ -107,7 +107,7 @@ private:
 
 	void ExecuteEKey(IInventoryHUDInterface* Interface);
 
-	void UpdateEquippedAndQASlots(TObjectPtr<UInventorySlot> InventorySlot, const F_InventoryItem* Item);
+	void UpdateEquippedAndQASlots(TObjectPtr<UInventorySlot> InventorySlot, const FInventoryItem* Item);
 
 	/** For OnSliderValueConfirmed Event */
 	UFUNCTION()

@@ -5,7 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Systems/Inventory/BaseStorage.h"
 #include "Systems/Inventory/Widgets/StorageContentSlot.h"
-#include "Systems/Inventory/F_InventoryItem.h"
+#include "Systems/Inventory/FInventoryItem.h"
 #include "Systems/Inventory/BaseItem.h"
 #include "Systems/Inventory/BaseConsumable.h"
 #include "Systems/Inventory/CommonTypes.h"
@@ -66,7 +66,7 @@ void UStorageContentWidget::NativeTick(const FGeometry& MyGeometry, float InDelt
 	}
 }
 
-void UStorageContentWidget::CreateInfoWidget(F_InventoryItem Item)
+void UStorageContentWidget::CreateInfoWidget(FInventoryItem Item)
 {
 	if (InfoWidgetClass && Item.ItemType != EItemType::EIT_None)
 	{

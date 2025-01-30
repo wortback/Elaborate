@@ -9,7 +9,7 @@
 
 class UWrapBox;
 class ABaseStorage;
-struct F_InventoryItem;
+struct FInventoryItem;
 class UStorageContentSlot;
 class UItemInfoWidget;
 
@@ -51,5 +51,5 @@ public:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 	UFUNCTION()
-	void CreateInfoWidget(F_InventoryItem Item);
+	void CreateInfoWidget(FInventoryItem Item);
 };

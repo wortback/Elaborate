@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Systems/Inventory/F_InventoryItem.h"
+#include "Systems/Inventory/FInventoryItem.h"
 #include "InventorySlot.generated.h"
 
 
@@ -58,7 +58,7 @@ public:
 	UTexture2D* CursedBG = nullptr;
 
 public:
-	F_InventoryItem Item;
+	FInventoryItem Item;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(ExposeOnSpawn = "true"))
 	UPrimaryHUDWidget* OwningHUD;

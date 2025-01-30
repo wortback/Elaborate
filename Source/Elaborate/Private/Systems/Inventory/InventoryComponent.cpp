@@ -30,7 +30,7 @@ void UInventoryComponent::BeginPlay()
 	InitialiseInventory();
 }
 
-bool UInventoryComponent::ProcessItem(F_InventoryItem* Item, int32 Quantity, bool UpdateWeight)
+bool UInventoryComponent::ProcessItem(FInventoryItem* Item, int32 Quantity, bool UpdateWeight)
 {
 	if (Item)
 	{
@@ -42,7 +42,7 @@ bool UInventoryComponent::ProcessItem(F_InventoryItem* Item, int32 Quantity, boo
 
 			if (ItemIndexLocation >= 0)
 			{
-				F_InventoryItem* AddedItem = AddItem(Item, ItemIndexLocation, Quantity, UpdateWeight);
+				FInventoryItem* AddedItem = AddItem(Item, ItemIndexLocation, Quantity, UpdateWeight);
 				if (!AddedItem)
 				{
 					UE_LOG(LogInventoryComponent, Log, TEXT("Failed to process the item since the pointer is invalid."));
@@ -80,18 +80,18 @@ void UInventoryComponent::UpdateCarriedWeight(float Weight)
 	CarriedWeight += Weight;
 }
 
-F_InventoryItem* UInventoryComponent::AddItem(F_InventoryItem* Item, int IndexLocation, int32 Quantity, bool UpdateWeight)
+FInventoryItem* UInventoryComponent::AddItem(FInventoryItem* Item, int IndexLocation, int32 Quantity, bool UpdateWeight)
 {
 	UE_LOG(LogInventoryComponent, Log, TEXT("Adding a new item of type %s"), *(EItemTypeToString(Item->ItemType)));
 	UE_LOG(LogInventoryComponent, Log, TEXT("In quantity %d"), Quantity);
 
 	if (SetItemsForItemType(Item->ItemType).IsValidIndex(IndexLocation))
 	{
-		F_InventoryItem* ItemAtLocation = &SetItemsForItemType(Item->ItemType)[IndexLocation];
+		FInventoryItem* ItemAtLocation = &SetItemsForItemType(Item->ItemType)[IndexLocation];
 
-		// A new F_InventoryItem Object that stores DeltaQuantity
+		// A new FInventoryItem Object that stores DeltaQuantity
 		// if it is bigger than 0, will attempt to store the remaining copies of the item in a separate slot
-		F_InventoryItem* Result = new F_InventoryItem(*Item);
+		FInventoryItem* Result = new FInventoryItem(*Item);
 
 		UBaseItem* DefaultItem = Cast<UBaseItem>(Item->ItemClass->GetDefaultObject());
 		if (DefaultItem)
@@ -126,7 +126,7 @@ F_InventoryItem* UInventoryComponent::AddItem(F_InventoryItem* Item, int IndexLo
 	return nullptr;
 }
 
-bool UInventoryComponent::RemoveItem(F_InventoryItem* Item, int32 Quantity)
+bool UInventoryComponent::RemoveItem(FInventoryItem* Item, int32 Quantity)
 {
 	UE_LOG(LogInventoryComponent, Log, TEXT("Removing %s items"), *FString::FromInt(Quantity));
 	if (Item->ItemType != EItemType::EIT_None)
@@ -134,7 +134,7 @@ bool UInventoryComponent::RemoveItem(F_InventoryItem* Item, int32 Quantity)
 		if (SetItemsForItemType(Item->ItemType).IsValidIndex(Item->IndexLocation))
 		{
 			float ItemWeight = 0.0f;
-			F_InventoryItem* ItemAtLocation = &SetItemsForItemType(Item->ItemType)[Item->IndexLocation];
+			FInventoryItem* ItemAtLocation = &SetItemsForItemType(Item->ItemType)[Item->IndexLocation];
 			if (ItemAtLocation->Quantity == Quantity)
 			{
 				UBaseItem* DefaultItem = Cast<UBaseItem>(ItemAtLocation->ItemClass->GetDefaultObject());
@@ -161,7 +161,7 @@ bool UInventoryComponent::RemoveItem(F_InventoryItem* Item, int32 Quantity)
 	return false;
 }
 
-bool UInventoryComponent::EquipItem(F_InventoryItem* Item, int32 Location)
+bool UInventoryComponent::EquipItem(FInventoryItem* Item, int32 Location)
 {
 	switch (Item->ItemType)
 	{
@@ -194,7 +194,7 @@ bool UInventoryComponent::EquipItem(F_InventoryItem* Item, int32 Location)
 	}
 }
 
-bool UInventoryComponent::UnequipItem(F_InventoryItem* Item, int32 Location)
+bool UInventoryComponent::UnequipItem(FInventoryItem* Item, int32 Location)
 {
 	UE_LOG(LogInventoryComponent, Log, TEXT("Unequipping the item..."));
 	if (ProcessItem(Item, Item->Quantity, false))
@@ -209,14 +209,14 @@ bool UInventoryComponent::UnequipItem(F_InventoryItem* Item, int32 Location)
 		}
 		else if (Item->ItemType == EItemType::EIT_Consumable)
 		{
-			F_InventoryItem& ItemAtLocation = GetSpecialItemByIndex(Location);
+			FInventoryItem& ItemAtLocation = GetSpecialItemByIndex(Location);
 			ItemAtLocation.ClearItem();
 		}
 	}
 	return false;
 }
 
-bool UInventoryComponent::TransferItem(F_InventoryItem* Item, UInventoryComponent* Receiver, int32 Quantity /*= 1*/)
+bool UInventoryComponent::TransferItem(FInventoryItem* Item, UInventoryComponent* Receiver, int32 Quantity /*= 1*/)
 {
 	if (Receiver->ProcessItem(Item, Quantity, true))
 	{
@@ -227,7 +227,7 @@ bool UInventoryComponent::TransferItem(F_InventoryItem* Item, UInventoryComponen
 	return false;
 }
 
-bool UInventoryComponent::ReceiveItem(F_InventoryItem* Item, UInventoryComponent* Sender, int32 Quantity /*= 1*/)
+bool UInventoryComponent::ReceiveItem(FInventoryItem* Item, UInventoryComponent* Sender, int32 Quantity /*= 1*/)
 {
 	if (ProcessItem(Item, Quantity, true))
 	{
@@ -238,7 +238,7 @@ bool UInventoryComponent::ReceiveItem(F_InventoryItem* Item, UInventoryComponent
 	return false;
 }
 
-void UInventoryComponent::SwapEquipped(F_InventoryItem& Item, F_InventoryItem& EquippedItem)
+void UInventoryComponent::SwapEquipped(FInventoryItem& Item, FInventoryItem& EquippedItem)
 {
 	if (!SetItemsForItemType(Item.ItemType).IsValidIndex(Item.IndexLocation))
 	{
@@ -246,8 +246,8 @@ void UInventoryComponent::SwapEquipped(F_InventoryItem& Item, F_InventoryItem& E
 		return;
 	}
 
-	F_InventoryItem& ItemAtLocation = SetItemsForItemType(Item.ItemType)[Item.IndexLocation];
-	F_InventoryItem Temp;
+	FInventoryItem& ItemAtLocation = SetItemsForItemType(Item.ItemType)[Item.IndexLocation];
+	FInventoryItem Temp;
 	Temp.ItemClass = EquippedItem.ItemClass;
 	Temp.ItemType = EquippedItem.ItemType;
 	Temp.Quantity = EquippedItem.Quantity;
@@ -261,9 +261,9 @@ void UInventoryComponent::SwapEquipped(F_InventoryItem& Item, F_InventoryItem& E
 	ItemAtLocation.Quantity = Temp.Quantity;
 }
 
-void UInventoryComponent::EquipQAItem(F_InventoryItem& Item, int32 Location)
+void UInventoryComponent::EquipQAItem(FInventoryItem& Item, int32 Location)
 {
-	F_InventoryItem& EquippedItem = GetSpecialItemByIndex(Location);
+	FInventoryItem& EquippedItem = GetSpecialItemByIndex(Location);
 	// Inventory to Special (empty) equip
 	if (!IsQAItemIndex(Item.IndexLocation) && IsQAItemIndex(Location) && EquippedItem.ItemType == EItemType::EIT_None)
 	{
@@ -271,7 +271,7 @@ void UInventoryComponent::EquipQAItem(F_InventoryItem& Item, int32 Location)
 		EquippedItem.ItemType = Item.ItemType;
 		EquippedItem.Quantity = Item.Quantity;
 
-		F_InventoryItem& ItemAtLocation = SetItemsForItemType(Item.ItemType)[Item.IndexLocation];
+		FInventoryItem& ItemAtLocation = SetItemsForItemType(Item.ItemType)[Item.IndexLocation];
 		ItemAtLocation.ClearItem();
 	}
 	// Inventory to Special (not empty) swap
@@ -292,7 +292,7 @@ void UInventoryComponent::EquipQAItem(F_InventoryItem& Item, int32 Location)
 	// Special to special
 	else if (IsQAItemIndex(Item.IndexLocation) && IsQAItemIndex(Location))
 	{
-		F_InventoryItem Temp = EquippedItem;
+		FInventoryItem Temp = EquippedItem;
 		Temp.ItemClass = EquippedItem.ItemClass;
 		Temp.ItemType = EquippedItem.ItemType;
 		Temp.Quantity = EquippedItem.Quantity;
@@ -301,7 +301,7 @@ void UInventoryComponent::EquipQAItem(F_InventoryItem& Item, int32 Location)
 		EquippedItem.ItemType = Item.ItemType;
 		EquippedItem.Quantity = Item.Quantity;
 
-		F_InventoryItem& ItemAtLocation = GetSpecialItemByIndex(Item.IndexLocation);
+		FInventoryItem& ItemAtLocation = GetSpecialItemByIndex(Item.IndexLocation);
 		ItemAtLocation.ItemClass = Temp.ItemClass;
 		ItemAtLocation.ItemType = Temp.ItemType;
 		ItemAtLocation.Quantity = Temp.Quantity;
@@ -309,17 +309,17 @@ void UInventoryComponent::EquipQAItem(F_InventoryItem& Item, int32 Location)
 	
 }
 
-void UInventoryComponent::Consume(F_InventoryItem& Item)
+void UInventoryComponent::Consume(FInventoryItem& Item)
 {
 	// TODO: Actual implementation of the method
 	UE_LOG(LogInventoryComponent, Warning, TEXT("Consuming the item..."));
-	F_InventoryItem& ItemAtLocation = SetItemsForItemType(Item.ItemType)[Item.IndexLocation];
+	FInventoryItem& ItemAtLocation = SetItemsForItemType(Item.ItemType)[Item.IndexLocation];
 	ItemAtLocation.Quantity--;
 	UBaseItem* DefaultItem = Cast<UBaseItem>(ItemAtLocation.ItemClass->GetDefaultObject());
 	UpdateCarriedWeight(-DefaultItem->Weight);
 }
 
-const TArray<F_InventoryItem>& UInventoryComponent::GetItemsForItemType(EItemType ItemType) const
+const TArray<FInventoryItem>& UInventoryComponent::GetItemsForItemType(EItemType ItemType) const
 {
 	switch (ItemType)
 	{
@@ -339,7 +339,7 @@ const TArray<F_InventoryItem>& UInventoryComponent::GetItemsForItemType(EItemTyp
 	}
 }
 
-int32 UInventoryComponent::FindAvailableLocation(F_InventoryItem* Item)
+int32 UInventoryComponent::FindAvailableLocation(FInventoryItem* Item)
 {
 	UE_LOG(LogInventoryComponent, Log, TEXT("Searching for an available location..."));
 
@@ -347,7 +347,7 @@ int32 UInventoryComponent::FindAvailableLocation(F_InventoryItem* Item)
 	UBaseItem* DefaultItem = Cast<UBaseItem>(Item->ItemClass->GetDefaultObject(true));
 	if (DefaultItem->bIsStackable)
 	{
-		for (const F_InventoryItem& Element : GetItemsForItemType(Item->ItemType))
+		for (const FInventoryItem& Element : GetItemsForItemType(Item->ItemType))
 		{
 			if (Element.ItemClass == Item->ItemClass)
 			{
@@ -361,7 +361,7 @@ int32 UInventoryComponent::FindAvailableLocation(F_InventoryItem* Item)
 	}
 
 	// Case 2: If there's an inventory slot that is currently empty
-	for (const F_InventoryItem& Element : GetItemsForItemType(Item->ItemType))
+	for (const FInventoryItem& Element : GetItemsForItemType(Item->ItemType))
 	{
 		if (Element.ItemClass == UBaseItem::StaticClass())
 		{
@@ -374,18 +374,18 @@ int32 UInventoryComponent::FindAvailableLocation(F_InventoryItem* Item)
 	UE_LOG(LogInventoryComponent, Warning, TEXT("No suitable slot found."));
 
 	int32 Capacity = GetItemsForItemType(Item->ItemType).Num();
-	TArray<F_InventoryItem>& Items = SetItemsForItemType(Item->ItemType);
+	TArray<FInventoryItem>& Items = SetItemsForItemType(Item->ItemType);
 	UE_LOG(LogInventoryComponent, Log, TEXT("Extending current inventory capacity."));
 	UE_LOG(LogInventoryComponent, Log, TEXT("Current capacity is: %d"), Capacity);
 	UE_LOG(LogInventoryComponent, Log, TEXT("New capacity is: %d"), Capacity + CAPACITY_INCREASE_FACTOR);
-	TArray<F_InventoryItem> TempEmpty;
+	TArray<FInventoryItem> TempEmpty;
 	InitialiseItemArray(TempEmpty, CAPACITY_INCREASE_FACTOR, Capacity);
 	Items.Append(TempEmpty);
 
 	return FindAvailableLocation(Item);
 }
 
-TArray<F_InventoryItem>& UInventoryComponent::SetItemsForItemType(EItemType ItemType)
+TArray<FInventoryItem>& UInventoryComponent::SetItemsForItemType(EItemType ItemType)
 {
 	switch (ItemType)
 	{
@@ -408,7 +408,7 @@ TArray<F_InventoryItem>& UInventoryComponent::SetItemsForItemType(EItemType Item
 void UInventoryComponent::InitialiseInventory()
 {
 	// Initialise all arrays
-	TArray<TArray<F_InventoryItem>*> ItemArrays = { &Equipment, &QuestItems, &Consumables, &MiscellaneousItems };
+	TArray<TArray<FInventoryItem>*> ItemArrays = { &Equipment, &QuestItems, &Consumables, &MiscellaneousItems };
 	TArray<int32> Capacities = { EquipmentInitialCapacity, QuestItemsInitialCapacity, ConsumablesInitialCapacity, MiscellaneousItemsInitialCapacity };
 	for (int32 i = 0; i < ItemArrays.Num(); ++i)
 	{
@@ -416,7 +416,7 @@ void UInventoryComponent::InitialiseInventory()
 	}
 
 	// Initialise Equipped Items (special items)
-	TArray<F_InventoryItem*> EquippedItems = { &EquippedArmour, &EquippedWeapon,
+	TArray<FInventoryItem*> EquippedItems = { &EquippedArmour, &EquippedWeapon,
 		&QuickAccessItem1, &QuickAccessItem2, &QuickAccessItem3, &QuickAccessItem4 };
 	TArray<int32> SpecialIndexLocations = { EQ_ARMOUR_INDEX_LOCATION, EQ_WEAPON_INDEX_LOCATION, QUICK_ITEM_1_INDEX_LOCATION,
 											QUICK_ITEM_2_INDEX_LOCATION, QUICK_ITEM_3_INDEX_LOCATION, QUICK_ITEM_4_INDEX_LOCATION };
@@ -428,7 +428,7 @@ void UInventoryComponent::InitialiseInventory()
 
 }
 
-void UInventoryComponent::InitialiseItemArray(TArray<F_InventoryItem>& ItemArr, int32 Capacity, int32 Index)
+void UInventoryComponent::InitialiseItemArray(TArray<FInventoryItem>& ItemArr, int32 Capacity, int32 Index)
 {
 	ItemArr.SetNum(Capacity);
 	for (int32 i = 0; i < Capacity; ++i)
@@ -441,7 +441,7 @@ void UInventoryComponent::InitialiseItemArray(TArray<F_InventoryItem>& ItemArr, 
 	}
 }
 
-void UInventoryComponent::InitialiseEquippedItem(F_InventoryItem& Item, int32 IndexLocation)
+void UInventoryComponent::InitialiseEquippedItem(FInventoryItem& Item, int32 IndexLocation)
 {
 	Item.Quantity = 0;
 	Item.OwningInventory = this;
@@ -450,7 +450,7 @@ void UInventoryComponent::InitialiseEquippedItem(F_InventoryItem& Item, int32 In
 	Item.ItemType = EItemType::EIT_None;
 }
 
-F_InventoryItem& UInventoryComponent::GetSpecialItemByIndex(int32 Index)
+FInventoryItem& UInventoryComponent::GetSpecialItemByIndex(int32 Index)
 {
 	switch (Index)
 	{
@@ -484,7 +484,7 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-const F_InventoryItem& UInventoryComponent::GetQuickAccessItem(int32 QAIndex) const
+const FInventoryItem& UInventoryComponent::GetQuickAccessItem(int32 QAIndex) const
 {
 	switch (QAIndex)
 	{

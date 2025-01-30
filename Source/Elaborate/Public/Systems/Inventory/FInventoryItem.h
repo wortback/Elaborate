@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Systems/Inventory/BaseItem.h"
 #include "Systems/Inventory/CommonTypes.h"
-#include "F_InventoryItem.generated.h"
+#include "FInventoryItem.generated.h"
 
 
 class UInventoryComponent;
@@ -14,12 +14,12 @@ class UInventoryComponent;
 constexpr int32 DEFAULT_INDEX_LOCATION = -1;
 
 /**
- * @struct F_InventoryItem
+ * @struct FInventoryItem
  * Item struct used for storing inventory related item information.
  * 
  */
 USTRUCT(Blueprintable)
-struct F_InventoryItem
+struct FInventoryItem
 {
     GENERATED_BODY()
 
@@ -43,11 +43,11 @@ public:
     EItemType ItemType;
 
     // Default constructor and Destructor
-    F_InventoryItem();
-    ~F_InventoryItem();
+    FInventoryItem();
+    ~FInventoryItem();
 
     // Other constructors
-    F_InventoryItem(const F_InventoryItem& Item);
+    FInventoryItem(const FInventoryItem& Item);
 
     /** Reset the item to it's defaults (only its class, quantity, and type). Preserves the index */
     void ClearItem();
