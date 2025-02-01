@@ -15,6 +15,7 @@
 #include "Serialization/JsonReader.h"
 
 #include "Systems/SaveSystem.h"
+#include "Systems/Inventory/WorldItem.h"
 #include "Core/ElaborateGameMode.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);

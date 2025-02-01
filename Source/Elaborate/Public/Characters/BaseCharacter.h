@@ -7,6 +7,7 @@
 #include "Logging/LogMacros.h"
 
 #include "Systems/Interfaces/SavableCharacter.h"
+#include "Systems/Interfaces/CombatCharacterInterface.h"
 
 #include "BaseCharacter.generated.h"
 
@@ -73,7 +74,11 @@ public:
 
 	virtual void LoadCharacterData(const FCharacterSaveData& InSaveData) override;
 
+
+
 protected:
+
+	/// ISavableCharacter
 
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);

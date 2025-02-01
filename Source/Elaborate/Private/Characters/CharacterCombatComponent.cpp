@@ -3,10 +3,14 @@
 
 #include "Characters/CharacterCombatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/Character.h"
 
 #include "Systems/Interfaces/CombatWeaponInterface.h"
+#include "Systems/Interfaces/CombatCharacterInterface.h"
+#include "Systems/Inventory/InventoryComponent.h"
 #include "Systems/Inventory/WorldItem.h"
 #include "Systems/Inventory/BaseWeapon.h"
+#include "Systems/Inventory/WorldWeapons/MeleeWeaponWorld.h"
 
 #include "Elaborate.h"
 
@@ -22,6 +26,44 @@ void UCharacterCombatComponent::PerformAttack(bool bIsHeavy)
 	if (!EquippedWeapon)
 	{
 		UE_LOG(LogCombatSystem, Warning, TEXT("No weapon equipped!"));
+		UE_LOG(LogCombatSystem, Log, TEXT("Trying to fetch the equipped weapon from the inventory component..."));
+
+		if (TryFetchWeaponFromInventory())
+		{
+			UWorld* World = GetWorld();
+			if (!World) return;
+
+			// Set spawn location (e.g., character's position)
+			FVector SpawnLocation = GetOwner()->GetActorLocation() + FVector(50, 0, 0);
+			FRotator SpawnRotation = FRotator::ZeroRotator;
+
+			UBaseWeapon* DefaultWeapon = Cast<UBaseWeapon>(EquippedWeaponClass->GetDefaultObject());
+			if (DefaultWeapon)
+			{
+				switch (DefaultWeapon->WeaponType)
+				{
+				case EWeaponType::EWT_Melee:
+				{
+					EquippedWeapon = World->SpawnActorDeferred<AMeleeWeaponWorld>(AMeleeWeaponWorld::StaticClass(),
+						FTransform(SpawnRotation, SpawnLocation));
+					if (EquippedWeapon)
+					{
+						EquippedWeapon->SetItemClass(EquippedWeaponClass);  // Set before spawning
+						EquippedWeapon->FinishSpawning(FTransform(SpawnRotation, SpawnLocation));
+					}
+				}
+				default:
+					break;
+				}
+			}
+			EquipWeapon(EquippedWeapon);
+		}
+		else
+		{
+			UE_LOG(LogCombatSystem, Error, TEXT("Failed to attack since no weapon is equipped."));
+			return;
+		}
+
 		return;
 	}
 
@@ -44,9 +86,22 @@ void UCharacterCombatComponent::PerformAttack(bool bIsHeavy)
 		CombatWeapon->HeavyAttack();
 		return;
 	}
+	else
+	{
+		// Perform Normal Attack
+		CombatWeapon->Attack();
+	}
 
-	// Perform Normal Attack
-	CombatWeapon->Attack();
+	UAnimMontage* Montage = bIsHeavy ? HeavyAttackMontage : AttackMontage;
+
+	if (Montage)
+	{
+		PlayAttackMontage(Montage);
+	}
+	else
+	{
+		UE_LOG(LogCombatSystem, Warning, TEXT("No attack montage set for this type of attack."));
+	}
 }
 
 void UCharacterCombatComponent::TakeDamage(float IncomingDamage)
@@ -104,7 +159,7 @@ float UCharacterCombatComponent::CalculateTotalAttackDMG(bool bIsMelee)
 	// Calc base DMG
 	float TotalDMG = FMath::FRandRange(WeaponStats->MinBaseDamage, WeaponStats->MaxBaseDamage);
 	TotalDMG += bIsMelee ? BaseMeleeDMG : BaseRangedDMG;
-	
+
 	// Apply crit multiplier if crit hit
 	const float TotalCritRate = WeaponStats->CritRate + CritRate;
 
@@ -132,6 +187,11 @@ void UCharacterCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	OwnerCharacter = Cast<ACharacter>(GetOwner());
+	if (OwnerCharacter)
+	{
+		UE_LOG(LogCombatSystem, Log, TEXT("Owner Character of the combat component is successfully initialised."));
+	}
 }
 
 
@@ -162,3 +222,55 @@ void UCharacterCombatComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 
 }
 
+void UCharacterCombatComponent::PlayAttackMontage(UAnimMontage* Montage)
+{
+	if (!AttackMontage)
+	{
+		UE_LOG(LogCombatSystem, Warning, TEXT("No attack montage provided."));
+		return;
+	}
+
+	if (OwnerCharacter && OwnerCharacter->GetMesh())
+	{
+		UAnimInstance* AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
+		if (AnimInstance)
+		{
+			AnimInstance->Montage_Play(AttackMontage);
+		}
+	}
+}
+
+void UCharacterCombatComponent::EquipWeapon(AWorldItem* Weapon)
+{
+	if (OwnerCharacter && OwnerCharacter->GetMesh())
+	{
+		Weapon->AttachToComponent(OwnerCharacter->GetMesh(),
+			FAttachmentTransformRules::SnapToTargetIncludingScale,
+			TEXT("WeaponSocket"));
+	}
+
+}
+
+bool UCharacterCombatComponent::TryFetchWeaponFromInventory()
+{
+	if (OwnerCharacter)
+	{
+		UInventoryComponent* InventoryComp = OwnerCharacter->FindComponentByClass<UInventoryComponent>();
+		if (InventoryComp)
+		{
+			UE_LOG(LogCombatSystem, Log, TEXT("Inventory Component Found!"));
+
+			EquippedWeaponClass = InventoryComp->GetEquippedWeaponClass();
+			if (EquippedWeaponClass)
+			{
+				return true;
+			}
+			return false;
+		}
+		else
+		{
+			UE_LOG(LogCombatSystem, Warning, TEXT("Cannot find the inventory component of the owner character."));
+		}
+	}
+	return false;
+}

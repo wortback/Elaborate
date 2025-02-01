@@ -205,5 +205,6 @@ public:
 	* @param QAIndex Index of the quick item (range: 1-4)
 	*/
 	const FInventoryItem& GetQuickAccessItem(int32 QAIndex) const;
-		
+	
+	const TSubclassOf<UBaseItem> GetEquippedWeaponClass() const { return EquippedWeapon.ItemClass; };
 };

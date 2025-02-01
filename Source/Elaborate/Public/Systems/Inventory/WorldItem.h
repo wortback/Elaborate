@@ -53,11 +53,15 @@ protected:
 
 	void SetDespawnTimer();
 
+	void InitialiseMeshBasedOnClass();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual bool Interact(UInventoryComponent* Inventory) override;
+
+	void SetItemClass(TSubclassOf<UBaseItem> NewItemClass);
 
 	inline TSubclassOf<UBaseItem> GetItemClass() { return ItemClass; };
 

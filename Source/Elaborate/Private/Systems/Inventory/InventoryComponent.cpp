@@ -6,7 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "Systems/Inventory/CommonTypes.h"
-#include "Systems/Inventory//Defines.h"
+#include "Systems/Inventory/Defines.h"
 
 // Logging
 #include "Elaborate.h"

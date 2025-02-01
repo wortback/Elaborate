@@ -63,6 +63,18 @@ void AWorldItem::BeginPlay()
 
 void AWorldItem::PreInitializeComponents()
 {
+	InitialiseMeshBasedOnClass();
+	
+}
+
+
+void AWorldItem::SetDespawnTimer()
+{
+	SetLifeSpan(DespawnTime);
+}
+
+void AWorldItem::InitialiseMeshBasedOnClass()
+{
 	if (ItemClass)
 	{
 		// Is the mesh is not set in the BP class, set 
@@ -76,13 +88,6 @@ void AWorldItem::PreInitializeComponents()
 			}
 		}
 	}
-	
-}
-
-
-void AWorldItem::SetDespawnTimer()
-{
-	SetLifeSpan(DespawnTime);
 }
 
 // Called every frame
@@ -125,5 +130,13 @@ bool AWorldItem::Interact(UInventoryComponent* Inventory)
 	delete Item;
 	UE_LOG(LogItems, Warning, TEXT("ItemClass is not set for this WorldObject! Failed to interact."));
 	return false;
+}
+
+// Called every frame
+void AWorldItem::SetItemClass(TSubclassOf<UBaseItem> NewItemClass)
+{
+	ItemClass = NewItemClass;
+
+	InitialiseMeshBasedOnClass();
 }
 

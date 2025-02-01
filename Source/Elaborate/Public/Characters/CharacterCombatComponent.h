@@ -11,6 +11,7 @@
 class UCharacterMovementComponent;
 class AWorldItem;
 class UAnimMontage;
+class UBaseWeapon;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ELABORATE_API UCharacterCombatComponent : public UActorComponent
@@ -75,7 +76,13 @@ protected:
 	// Other References
 	UCharacterMovementComponent* MovementComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
 	AWorldItem* EquippedWeapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
+	TSubclassOf<UBaseWeapon> EquippedWeaponClass;
+
+	ACharacter* OwnerCharacter;
 
 
 public:	
@@ -106,5 +113,10 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+private:
+	void PlayAttackMontage(UAnimMontage* Montage);
+
+	void EquipWeapon(AWorldItem* Weapon);
+
+	bool TryFetchWeaponFromInventory();
 };
